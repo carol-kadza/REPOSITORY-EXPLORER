@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:github_repository_explorer/models/repo.dart';
+import 'package:github_repository_explorer/services/db_service.dart';
 import 'package:http/http.dart' as http;
-
-import '../models/repo.dart';
-import '../services/db_service.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import '../models/repo.dart';
+import 'package:github_repository_explorer/models/repo.dart';
 
 class DB {
   static Database? _db;
