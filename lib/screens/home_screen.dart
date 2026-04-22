@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:github_repository_explorer/models/repo.dart';
+import 'package:github_repository_explorer/screens/detail_screen.dart';
 import 'package:github_repository_explorer/services/db_service.dart';
+import 'package:github_repository_explorer/widgets/repo_tile.dart';
 import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
@@ -12,8 +14,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<Repo> allRepos = [];
   List<Repo> repos = [];
   bool loading = true;
+  String query = '';
 
   final DB db = DB();
 
@@ -40,18 +44,32 @@ class _HomeState extends State<Home> {
     try {
       // If we already have data, just use it (offline mode)
       if (await db.hasData()) {
-        repos = await db.getRepos();
+        allRepos = await db.getRepos();
       } else {
         // first time online fetch
-        repos = await fetchFromApi();
-        await db.saveRepos(repos);
+        allRepos = await fetchFromApi();
+        await db.saveRepos(allRepos);
       }
     } catch (e) {
       // fallback if no internet
-      repos = await db.getRepos();
+      allRepos = await db.getRepos();
     }
 
+    repos = List.of(allRepos);
     setState(() => loading = false);
+  }
+
+  void filterRepos(String value) {
+    final trimmed = value.trim().toLowerCase();
+
+    setState(() {
+      query = value;
+      repos = allRepos.where((repo) {
+        return repo.name.toLowerCase().contains(trimmed) ||
+            repo.owner.toLowerCase().contains(trimmed) ||
+            repo.fullName.toLowerCase().contains(trimmed);
+      }).toList();
+    });
   }
 
   @override
@@ -62,30 +80,52 @@ class _HomeState extends State<Home> {
       ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: repos.length,
-              itemBuilder: (context, index) {
-                final r = repos[index];
-
-                return Card(
-                  margin: const EdgeInsets.all(8),
-                  child: ListTile(
-                    title: Text(r.name),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Owner: ${r.owner}"),
-                        const SizedBox(height: 5),
-                        Text(
-                          r.description,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextField(
+                    onChanged: filterRepos,
+                    decoration: InputDecoration(
+                      hintText: 'Search repositories or owners',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: query.isEmpty
+                          ? null
+                          : IconButton(
+                              onPressed: () => filterRepos(''),
+                              icon: const Icon(Icons.clear),
+                            ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
-                );
-              },
+                ),
+                Expanded(
+                  child: repos.isEmpty
+                      ? const Center(
+                          child: Text('No repositories match your search.'),
+                        )
+                      : ListView.builder(
+                          itemCount: repos.length,
+                          itemBuilder: (context, index) {
+                            final repo = repos[index];
+
+                            return RepoTile(
+                              repo: repo,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => DetailScreen(repo: repo),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
     );
   }

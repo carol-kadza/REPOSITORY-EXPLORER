@@ -4,6 +4,7 @@ class Repo {
   final String fullName;
   final String url;
   final String owner;
+  final String avatarUrl;
   final String description;
 
   const Repo({
@@ -12,6 +13,7 @@ class Repo {
     required this.fullName,
     required this.url,
     required this.owner,
+    required this.avatarUrl,
     required this.description,
   });
 
@@ -22,6 +24,8 @@ class Repo {
       fullName: json['full_name'] as String? ?? '',
       url: json['html_url'] as String? ?? '',
       owner: (json['owner'] as Map<String, dynamic>?)?['login'] as String? ?? '',
+      avatarUrl:
+          (json['owner'] as Map<String, dynamic>?)?['avatar_url'] as String? ?? '',
       description: json['description'] as String? ?? 'No description',
     );
   }
@@ -33,6 +37,7 @@ class Repo {
       fullName: map['fullName'] as String? ?? '',
       url: map['url'] as String? ?? '',
       owner: map['owner'] as String? ?? '',
+      avatarUrl: map['avatarUrl'] as String? ?? '',
       description: map['description'] as String? ?? 'No description',
     );
   }
@@ -44,6 +49,7 @@ class Repo {
       'fullName': fullName,
       'url': url,
       'owner': owner,
+      'avatarUrl': avatarUrl,
       'description': description,
     };
   }
