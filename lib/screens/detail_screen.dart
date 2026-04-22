@@ -11,6 +11,9 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final visibilityColor = repo.isPrivate ? Colors.orange : Colors.green;
+    final visibilityLabel = repo.isPrivate ? 'Private repository' : 'Public repository';
+
     return Scaffold(
       appBar: AppBar(
         title: Text(repo.name),
@@ -43,6 +46,23 @@ class DetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text('Owner: ${repo.owner}'),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(
+                  repo.isPrivate ? Icons.lock : Icons.public,
+                  color: visibilityColor,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  visibilityLabel,
+                  style: TextStyle(
+                    color: visibilityColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 8),
             Text('Repository URL: ${repo.url}'),
             const SizedBox(height: 16),

@@ -18,7 +18,7 @@ class DB {
 
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE repos(
@@ -28,6 +28,7 @@ class DB {
             url TEXT,
             owner TEXT,
             avatarUrl TEXT,
+            isPrivate INTEGER DEFAULT 0,
             description TEXT
           )
         ''');
@@ -36,6 +37,11 @@ class DB {
         if (oldVersion < 2) {
           await db.execute(
             'ALTER TABLE repos ADD COLUMN avatarUrl TEXT DEFAULT ""',
+          );
+        }
+        if (oldVersion < 3) {
+          await db.execute(
+            'ALTER TABLE repos ADD COLUMN isPrivate INTEGER DEFAULT 0',
           );
         }
       },

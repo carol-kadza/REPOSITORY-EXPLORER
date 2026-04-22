@@ -13,6 +13,9 @@ class RepoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final visibilityColor = repo.isPrivate ? Colors.orange : Colors.green;
+    final visibilityLabel = repo.isPrivate ? 'Private' : 'Public';
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: ListTile(
@@ -33,6 +36,24 @@ class RepoTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Owner: ${repo.owner}'),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(
+                  repo.isPrivate ? Icons.lock : Icons.public,
+                  size: 16,
+                  color: visibilityColor,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  visibilityLabel,
+                  style: TextStyle(
+                    color: visibilityColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 4),
             Text(
               repo.description,

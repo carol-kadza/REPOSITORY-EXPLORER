@@ -5,6 +5,7 @@ class Repo {
   final String url;
   final String owner;
   final String avatarUrl;
+  final bool isPrivate;
   final String description;
 
   const Repo({
@@ -14,6 +15,7 @@ class Repo {
     required this.url,
     required this.owner,
     required this.avatarUrl,
+    required this.isPrivate,
     required this.description,
   });
 
@@ -26,6 +28,7 @@ class Repo {
       owner: (json['owner'] as Map<String, dynamic>?)?['login'] as String? ?? '',
       avatarUrl:
           (json['owner'] as Map<String, dynamic>?)?['avatar_url'] as String? ?? '',
+      isPrivate: json['private'] as bool? ?? false,
       description: json['description'] as String? ?? 'No description',
     );
   }
@@ -38,6 +41,7 @@ class Repo {
       url: map['url'] as String? ?? '',
       owner: map['owner'] as String? ?? '',
       avatarUrl: map['avatarUrl'] as String? ?? '',
+      isPrivate: (map['isPrivate'] as int? ?? 0) == 1,
       description: map['description'] as String? ?? 'No description',
     );
   }
@@ -50,6 +54,7 @@ class Repo {
       'url': url,
       'owner': owner,
       'avatarUrl': avatarUrl,
+      'isPrivate': isPrivate ? 1 : 0,
       'description': description,
     };
   }
