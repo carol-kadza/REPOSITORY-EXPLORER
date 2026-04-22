@@ -1,17 +1,23 @@
-# github_repository_explorer
+AI Tool Usage 
 
-A new Flutter project.
+I used AI tools to support my development process.
 
-## Getting Started
+1. Areas where AI was used:
+- assisting with understanding how to connect SQLite with Flutter
+- Helping clarify how to handle offline data storage and retrieval
+- providing guidance on how to parse gitHub API JSON responses
 
-This project is a starting point for a Flutter application.
+2. How I used the AI:
+i mainly used it as a learning assistant to understand concepts and confirm my approach before implementing it myself
 
-A few resources to get you started if this is your first Flutter project:
+3. What I changed or adapted:
+- i simplified the structure to match what I understood and could explain in my own words
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- i modified the filtering logic to make it work on locally stored data only
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. What I did without AI:
+- I implemented the UI layout and navigation logic 
+- I wrote and tested the filtering function independently
+- I connected the screens and ensured data flows correctly between API, database, and UI
+
+
